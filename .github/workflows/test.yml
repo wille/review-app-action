@@ -1,0 +1,18 @@
+name: Test
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # 4.1.7
+      - name: Test
+        uses: ./
+        continue-on-error: true
+        with:
+          webhook_url: http://localhost:8080
+          webhook_secret: secret
+          image: image

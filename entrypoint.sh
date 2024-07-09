@@ -2,6 +2,8 @@
 
 VERSION=0.0.1
 
+TMP=${RUNNER_TEMP:-/tmp}
+
 [[ "$GITHUB_EVENT_NAME" != "pull_request" ]] && echo "Only 'pull_request' workflows are supported" && exit 1
 [[ -z "$GITHUB_EVENT_PATH" ]] && echo "Missing GITHUB_EVENT_PATH" && exit 1
 [[ -z "$INPUT_WEBHOOK_SECRET" ]] && echo "Missing INPUT_WEBHOOK_SECRET" && exit 1
@@ -51,14 +53,13 @@ action=$(read_event_field '.action')
 case $action in
     "opened" | "reopened" | "synchronize")
         [[ -z "$INPUT_IMAGE" ]] && echo "Missing INPUT_IMAGE" && exit 1
-        response=$(curl --silent --no-buffer --fail-with-body \
+        curl --silent --no-buffer --fail-with-body \
             -H "Content-Type: application/json" \
             -H "User-Agent: review-app-action/$VERSION" \
             -H "X-Hub-Signature-256: sha256=$WEBHOOK_SIGNATURE_256" \
             -X POST \
             --data "$webhook_data" "$INPUT_WEBHOOK_URL/v1" \
-            2>&1 | tee /dev/tty
-        )
+            2>&1 | tee "$TMP/output" # Stream the response to stdout and save it so we can parse it
 
         curl_status=$?
 
@@ -66,7 +67,7 @@ case $action in
 
         if [ $curl_status -eq 0 ]; then
             # The last line of the response is the review app URL
-            review_app_url=$(echo "$response" | tail -n1 | sed 's/Review App URL: //')
+            review_app_url=$(tail -n1 "$TMP/output" | sed 's/Review App URL: //')
             set_output "review_app_url=$review_app_url"
         fi
         ;;

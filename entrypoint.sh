@@ -7,7 +7,6 @@ VERSION=0.0.1
 [[ -z "$INPUT_WEBHOOK_SECRET" ]] && echo "Missing INPUT_WEBHOOK_SECRET" && exit 1
 [[ -z "$INPUT_WEBHOOK_URL" ]] && echo "Missing INPUT_WEBHOOK_URL" && exit 1
 [[ -z "$INPUT_REVIEW_APP_NAME" ]] && echo "Missing INPUT_REVIEW_APP_NAME" && exit 1
-[[ -z "$INPUT_ACTION" ]] && echo "Missing INPUT_ACTION" && exit 1
 
 github_event_data=$(cat "$GITHUB_EVENT_PATH")
 
@@ -48,12 +47,13 @@ if [ "$INPUT_DEBUG" = true ]; then
     echo "Webhook signature: $WEBHOOK_SIGNATURE_256"
 fi
 
-case $INPUT_ACTION in
-    "deploy")
+action=$(read_event_field '.action')
+case $action in
+    "opened" | "reopened" | "synchronize")
         [[ -z "$INPUT_IMAGE" ]] && echo "Missing INPUT_IMAGE" && exit 1
         response=$(curl --silent --no-buffer --fail-with-body \
             -H "Content-Type: application/json" \
-            -H "User-Agent: review-app-operator-action/$VERSION" \
+            -H "User-Agent: review-app-action/$VERSION" \
             -H "X-Hub-Signature-256: sha256=$WEBHOOK_SIGNATURE_256" \
             -X POST \
             --data "$webhook_data" "$INPUT_WEBHOOK_URL/v1" \
@@ -73,7 +73,7 @@ case $INPUT_ACTION in
     "close")
         curl --silent --no-buffer --fail-with-body \
             -H "Content-Type: application/json" \
-            -H "User-Agent: review-app-operator-action/$VERSION" \
+            -H "User-Agent: review-app-action/$VERSION" \
             -H "X-Hub-Signature-256: sha256=$WEBHOOK_SIGNATURE_256" \
             -X DELETE \
             --data "$webhook_data" "$INPUT_WEBHOOK_URL/v1"

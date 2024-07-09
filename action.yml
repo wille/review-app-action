@@ -1,5 +1,10 @@
 name: Review App Operator Action
 
+author: wille
+branding:
+  icon: anchor
+  color: blue
+
 description: Deploy review apps to Kubernetes using Github Actions and Review App Operator
 inputs:
   review_app_name:
@@ -15,10 +20,6 @@ inputs:
   webhook_secret:
     description: The webhook secret
     required: true
-  action:
-    description: The action to perform, either 'deploy' or 'delete'
-    required: false
-    default: deploy
   image:
     description: The new Docker Image to deploy
     required: false

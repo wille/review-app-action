@@ -15,8 +15,6 @@ Below is an example workflow to build, push and deploy a Docker image to a Kuber
 
 ## Workflow to create a review app for a pull request
 
-> [!NOTE]  
-> This action is not supported in `push` workflows. Review App Operator is designed to only target pull requests and not branches.
 
 ### `.github/workflows/pull_request.yml`
 
@@ -88,6 +86,10 @@ jobs:
           deployment_id: ${{ steps.create_deployment.outputs.deployment_id }}
           env_url: ${{ steps.deploy.outputs.review_app_url }}
 ```
+
+
+> [!NOTE]  
+> This action is not supported in `push` workflows. Review App Operator is designed to only target pull requests and not branches.
 
 > [!NOTE]
 > The `review_app_name` and `review_app_namespace` must match the `metadata.name` and `metadata.namespace` of the `ReviewApp` resource in Kubernetes.

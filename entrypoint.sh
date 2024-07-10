@@ -2,7 +2,8 @@
 
 VERSION=0.0.1
 
-TMP=${RUNNER_TEMP:-/tmp}
+TMP=${RUNNER_TEMP:-/tmp/review-app-action}
+mkdir -p "$TMP" || echo "Failed to mkdir $TMP" && exit 1
 
 [[ "$GITHUB_EVENT_NAME" != "pull_request" ]] && echo "Only 'pull_request' workflows are supported" && exit 1
 [[ -z "$GITHUB_EVENT_PATH" ]] && echo "Missing GITHUB_EVENT_PATH" && exit 1

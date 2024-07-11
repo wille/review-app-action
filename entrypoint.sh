@@ -72,7 +72,7 @@ case $action in
             set_output "review_app_url=$review_app_url"
         fi
         ;;
-    "close")
+    "closed")
         curl --silent --no-buffer --fail-with-body \
             -H "Content-Type: application/json" \
             -H "User-Agent: review-app-action/$VERSION" \

@@ -8,6 +8,8 @@ Prerequisites:
 - A Kubernetes cluster with Review App Operator installed and configured correctly
 - A `ReviewApp` resource in the cluster
 - Docker registry to push images from your workflow to your cluster pull and run
+- A webhook URL to the Review App Operator, same as `webhook.ingress.host` in the Operator configuration
+- The action secret `REVIEW_APP_WEBHOOK_SECRET` must be set to the same value as the `webhook.secret` the Operator configuration.
 
 ## Usage
 
@@ -130,6 +132,9 @@ jobs:
           env: ${{ github.head_ref }}
           desc: Pull request closed
 ```
+
+> [!NOTE]
+> Review App Operator does not integrate with Github Deployments yet, so the examples above includes [bobheadxi/deployments](https://github.com/bobheadxi/deployments) to create and update the deployment status on the pull request page, so that developers have easy access to the review app url.
 
 # Inputs
 

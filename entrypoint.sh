@@ -54,7 +54,7 @@ action=$(read_event_field '.action')
 case $action in
     "opened" | "reopened" | "synchronize")
         [[ -z "$INPUT_IMAGE" ]] && echo "Missing INPUT_IMAGE" && exit 1
-        curl --silent --no-buffer --fail-with-body \
+        curl --silent --show-error --no-buffer --fail-with-body \
             -H "Content-Type: application/json" \
             -H "User-Agent: review-app-action/$VERSION" \
             -H "X-Hub-Signature-256: sha256=$WEBHOOK_SIGNATURE_256" \
@@ -73,7 +73,7 @@ case $action in
         fi
         ;;
     "closed")
-        curl --silent --no-buffer --fail-with-body \
+        curl --silent --show-error --no-buffer --fail-with-body \
             -H "Content-Type: application/json" \
             -H "User-Agent: review-app-action/$VERSION" \
             -H "X-Hub-Signature-256: sha256=$WEBHOOK_SIGNATURE_256" \

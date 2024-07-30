@@ -2,6 +2,8 @@
 
 VERSION=0.0.1
 
+set -o pipefail
+
 TMP=${RUNNER_TEMP:-/tmp/review-app-action}
 mkdir -p "$TMP" || (echo "Failed to mkdir $TMP" && exit 1)
 

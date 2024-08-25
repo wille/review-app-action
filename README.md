@@ -108,7 +108,7 @@ on:
       - closed
 concurrency:
   group: review-app-${{ github.head_ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   cleanup:
@@ -116,8 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Close review app
-        uses: wille/review-app-operator-action@master
-        continue-on-error: true
+        uses: wille/review-app-action@master
         with:
           review_app_name: my-reviewapp
           review_app_namespace: staging

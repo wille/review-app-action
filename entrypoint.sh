@@ -34,6 +34,7 @@ webhook_data=$(cat <<EOF | jq
     "repositoryUrl": "$(read_event_field .repository.html_url)",
     "branchName": "$(read_event_field .pull_request.head.ref)",
     "pullRequestUrl": "$(read_event_field .pull_request.html_url)",
+    "pullRequestNumber": $(read_event_field .number),
     "image": "$INPUT_IMAGE",
     "merged": $(read_event_field .pull_request.merged),
     "sender": "$(read_event_field .sender.html_url)"
